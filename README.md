@@ -23,6 +23,9 @@ Flow:
 - clicking on a quote object in the timeline you can open a modal to shorten/increase it. saving it applies to the quote object everywhere.
 - deleting quote object from timeline is ok, no warning. delete quote object from source while quote is on timeline triggers warning it will be removed from timeline.
 - export to audio file for download. each export request kicks off a new generate process. Output file is versioned based on current project status. any changes to project cause a new export to give a new file. else generate gives cached file.
+- user can set the loudness of the music while a quote is playing.
+- normalize audio loudness for all quote sources and background track sources. global loudness slider?
+- single element on page for: video, waveform, text. When selecting quote source, set those elements. will have to regenerate audio when clicking between sources.
 
 - store entire project in document with links to sources and timestamps and names, etc. When loading project, pull up audio/video/text files when the specific object is clicked. have a shared cache if loading conference files. cache based on source link (lds website e.g.)
 
@@ -35,3 +38,5 @@ Tooling:
   - https://github.com/ytdl-node/ytdl
   - https://www.npmjs.com/package/youtube-mp3-downloader
 - given a link to a page, use a scraper to try and find media sources. user chooses a source. or... for lds site, scrape for the download button.
+- Use youtube iframe to load video: https://developers.google.com/youtube/iframe_api_reference
+- build custom video scrubber that works for the iframe or an uploaded video.

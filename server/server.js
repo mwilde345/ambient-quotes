@@ -1,28 +1,52 @@
+const path = require("path");
+const fs = require("fs");
 const { Database } = require("./data/database");
 
 var express = require("express");
 var { graphqlHTTP } = require("express-graphql");
 var { buildSchema } = require("graphql");
 var cors = require("cors");
+const { makeExecutableSchema } = require("graphql-tools");
+
+const schemaFile = path.join(__dirname, "schema.graphql");
+const typeDefs = fs.readFileSync(schemaFile, "utf8");
 
 const Projects = new Database("projects");
-
-// Construct a schema, using GraphQL schema language
-var schema = buildSchema(`
-  type Project {
-    sources: [String]
-  }
-  type Query {
-    project(id: String!): Project
-  }
-`);
+const Sources = new Database("sources");
+const Medias = new Database("medias");
+const Quotes = new Database("quotes");
 
 // The root provides a resolver function for each API endpoint
-var root = {
-  project: ({ id }) => {
-    return Projects.get(id);
+var resolvers = {
+  Query: {
+    project: (obj, args, context, info) => {
+      return Projects.get(args.id);
+    },
+  },
+  Project: {
+    // sources(obj, args, context, info) {
+    //   console.log(args);
+    //   return Sources.get("source-1");
+    // },
+    sources: (project) => project.sources,
+  },
+  Source: {
+    quotes: () => ["quote"],
+    medias: () => ["media"],
+  },
+  Media: {
+    type: () => "video",
+    link: () => "link here",
+    name: () => "sup",
+  },
+  Quote: {
+    start: () => 0,
+    end: () => 5,
   },
 };
+
+// Construct a schema, using GraphQL schema language
+const schema = makeExecutableSchema({ typeDefs, resolvers });
 
 var app = express();
 var corsOptions = {
@@ -34,7 +58,6 @@ app.use(
   "/graphql",
   graphqlHTTP({
     schema: schema,
-    rootValue: root,
     graphiql: true,
   })
 );

@@ -1,0 +1,24 @@
+type Media {
+  type: String
+  link: String
+  name: String
+}
+
+type Quote {
+  start: Int
+  end: Int
+}
+
+type Source {
+  quotes: [Quote]
+  medias: [Media]
+}
+
+type Project {
+  sources: [Source]
+}
+
+type Query {
+  project(id: String!): Project
+  sources: [String]
+}

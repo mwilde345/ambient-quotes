@@ -20,5 +20,5 @@ type Project {
 
 type Query {
   project(id: String!): Project
-  sources: [String]
+  test: ID
 }
